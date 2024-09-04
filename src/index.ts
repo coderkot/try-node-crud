@@ -4,10 +4,12 @@ const app = express()
 const port = 3003
 const db = {
     users: [
-        {id: 1, name: 'Alex'},
+        {id: 1, name: 'Alex Userson'},
         {id: 2, name: 'Dima'},
         {id: 3, name: 'Ed'},
         {id: 4, name: 'Arthur'},
+        {id: 5, name: 'Alex Alexov'},
+        {id: 6, name: 'Ed Brown'},
     ]
 }
 
