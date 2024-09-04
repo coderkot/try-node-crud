@@ -1,0 +1,22 @@
+{
+  "name": "lrn-node",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "author": "me",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon dist/index.js",
+    "dev": "nodemon --inspect dist/index.js",
+    "watch": "tsc -w"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.5.2",
+    "nodemon": "^3.1.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  }
+}
