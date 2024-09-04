@@ -1,4 +1,5 @@
 import express from 'express'
+import {HTTP_STATUS} from './consts'
 
 const app = express()
 const port = 3003
@@ -33,7 +34,7 @@ app.get('/users/:id', (req, res) => {
     )
 
     if (!foundUser) {
-        res.sendStatus(404)
+        res.sendStatus(HTTP_STATUS.NOT_FOUND)
         return
     }
 
@@ -42,7 +43,7 @@ app.get('/users/:id', (req, res) => {
 
 app.post('/users', (req, res) => {
     if (!req.body.name) {
-        res.status(400).send('Name cannot be empty')
+        res.status(HTTP_STATUS.BAD_REQUEST).send('Name cannot be empty')
         return
     }
 
@@ -52,7 +53,7 @@ app.post('/users', (req, res) => {
     }
 
     db.users.push(createdUser)
-    res.status(201).json(createdUser)
+    res.status(HTTP_STATUS.CREATED).json(createdUser)
 })
 
 app.delete('/users/:id', (req, res) => {
@@ -60,12 +61,12 @@ app.delete('/users/:id', (req, res) => {
         user => user.id !== +req.params.id
     )
 
-    res.sendStatus(204)
+    res.sendStatus(HTTP_STATUS.NO_CONTENT)
 })
 
 app.put('/users/:id', (req, res) => {
     if (!req.body.name) {
-        res.status(400).send('Name cannot be empty')
+        res.status(HTTP_STATUS.BAD_REQUEST).send('Name cannot be empty')
         return
     }
 
@@ -74,12 +75,12 @@ app.put('/users/:id', (req, res) => {
     )
 
     if (!foundUser) {
-        res.sendStatus(404)
+        res.sendStatus(HTTP_STATUS.NOT_FOUND)
         return
     }
 
     foundUser.name = req.body.name as string
-    res.sendStatus(204)
+    res.sendStatus(HTTP_STATUS.NO_CONTENT)
 })
 
 app.listen(port, () => {
