@@ -34,7 +34,7 @@ app.get('/users/:id', (req, res) => {
     )
 
     if (!foundUser) {
-        res.sendStatus(HTTP_STATUS.NOT_FOUND)
+        res.sendStatus(HTTP_STATUS.NOT_FOUND_404)
         return
     }
 
@@ -43,7 +43,7 @@ app.get('/users/:id', (req, res) => {
 
 app.post('/users', (req, res) => {
     if (!req.body.name) {
-        res.status(HTTP_STATUS.BAD_REQUEST).send('Name cannot be empty')
+        res.status(HTTP_STATUS.BAD_REQUEST_400).send('Name cannot be empty')
         return
     }
 
@@ -53,7 +53,7 @@ app.post('/users', (req, res) => {
     }
 
     db.users.push(createdUser)
-    res.status(HTTP_STATUS.CREATED).json(createdUser)
+    res.status(HTTP_STATUS.CREATED_201).json(createdUser)
 })
 
 app.delete('/users/:id', (req, res) => {
@@ -61,12 +61,12 @@ app.delete('/users/:id', (req, res) => {
         user => user.id !== +req.params.id
     )
 
-    res.sendStatus(HTTP_STATUS.NO_CONTENT)
+    res.sendStatus(HTTP_STATUS.NO_CONTENT_204)
 })
 
 app.put('/users/:id', (req, res) => {
     if (!req.body.name) {
-        res.status(HTTP_STATUS.BAD_REQUEST).send('Name cannot be empty')
+        res.status(HTTP_STATUS.BAD_REQUEST_400).send('Name cannot be empty')
         return
     }
 
@@ -75,12 +75,12 @@ app.put('/users/:id', (req, res) => {
     )
 
     if (!foundUser) {
-        res.sendStatus(HTTP_STATUS.NOT_FOUND)
+        res.sendStatus(HTTP_STATUS.NOT_FOUND_404)
         return
     }
 
     foundUser.name = req.body.name as string
-    res.sendStatus(HTTP_STATUS.NO_CONTENT)
+    res.sendStatus(HTTP_STATUS.NO_CONTENT_204)
 })
 
 app.listen(port, () => {
