@@ -1,9 +1,10 @@
-import express from 'express'
+import express, {Express, Request, Response} from 'express'
 import {HTTP_STATUS} from './consts'
+import {DB_Type, User, Users_List} from "./types";
 
-const app = express()
-const port = 3003
-const db = {
+const app: Express = express()
+const port: number = 3003
+const db: DB_Type = {
     users: [
         {id: 1, name: 'Alex Userson'},
         {id: 2, name: 'Dima'},
@@ -16,8 +17,8 @@ const db = {
 
 app.use(express.json())
 
-app.get('/users', (req, res) => {
-    let foundUsers = db.users
+app.get('/users', (req: Request, res: Response) => {
+    let foundUsers: Users_List = db.users
 
     if (req.query.name) {
         foundUsers = foundUsers.filter(
@@ -28,8 +29,8 @@ app.get('/users', (req, res) => {
     res.json(foundUsers)
 })
 
-app.get('/users/:id', (req, res) => {
-    const foundUser = db.users.find(
+app.get('/users/:id', (req: Request, res: Response) => {
+    const foundUser: User | undefined = db.users.find(
         user => user.id === +req.params.id
     )
 
@@ -41,13 +42,13 @@ app.get('/users/:id', (req, res) => {
     res.json(foundUser)
 })
 
-app.post('/users', (req, res) => {
+app.post('/users', (req: Request, res: Response) => {
     if (!req.body.name) {
         res.status(HTTP_STATUS.BAD_REQUEST_400).send('Name cannot be empty')
         return
     }
 
-    const createdUser =  {
+    const createdUser: User =  {
         id: +new Date(),
         name: req.body.name as string
     }
@@ -56,7 +57,7 @@ app.post('/users', (req, res) => {
     res.status(HTTP_STATUS.CREATED_201).json(createdUser)
 })
 
-app.delete('/users/:id', (req, res) => {
+app.delete('/users/:id', (req: Request, res: Response) => {
     db.users =  db.users.filter(
         user => user.id !== +req.params.id
     )
@@ -64,13 +65,13 @@ app.delete('/users/:id', (req, res) => {
     res.sendStatus(HTTP_STATUS.NO_CONTENT_204)
 })
 
-app.put('/users/:id', (req, res) => {
+app.put('/users/:id', (req: Request, res: Response) => {
     if (!req.body.name) {
         res.status(HTTP_STATUS.BAD_REQUEST_400).send('Name cannot be empty')
         return
     }
 
-    const foundUser = db.users.find(
+    const foundUser: User | undefined = db.users.find(
         user => user.id === +req.params.id
     )
 
