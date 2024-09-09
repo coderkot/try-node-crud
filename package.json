@@ -8,7 +8,8 @@
     "start": "nodemon dist/index.js",
     "dev": "nodemon --inspect dist/index.js",
     "watch": "tsc -w",
-    "build": "tsc"
+    "build": "tsc",
+    "deploy": "vercel --prod"
   },
   "dependencies": {
     "express": "^4.19.2"
