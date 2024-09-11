@@ -5,3 +5,7 @@ export enum HTTP_STATUS {
     CREATED_201 = 201,
     NO_CONTENT_204 = 204,
 }
+
+export enum STATUS_MESSAGES {
+    BODY_EMPTY_NAME = 'Name cannot be empty',
+}

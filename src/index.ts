@@ -1,5 +1,5 @@
 import express, {Express, Request, Response} from 'express'
-import {HTTP_STATUS} from './consts'
+import {HTTP_STATUS, STATUS_MESSAGES} from './consts'
 import {DBType, User, UsersList} from "./types";
 
 const app: Express = express()
@@ -44,7 +44,7 @@ app.get('/users/:id', (req: Request, res: Response) => {
 
 app.post('/users', (req: Request, res: Response) => {
     if (!req.body.name) {
-        res.status(HTTP_STATUS.BAD_REQUEST_400).send('Name cannot be empty')
+        res.status(HTTP_STATUS.BAD_REQUEST_400).send(STATUS_MESSAGES.BODY_EMPTY_NAME)
         return
     }
 
@@ -71,7 +71,7 @@ app.delete('/users/:id', (req: Request, res: Response) => {
 
 app.put('/users/:id', (req: Request, res: Response) => {
     if (!req.body.name) {
-        res.status(HTTP_STATUS.BAD_REQUEST_400).send('Name cannot be empty')
+        res.status(HTTP_STATUS.BAD_REQUEST_400).send(STATUS_MESSAGES.BODY_EMPTY_NAME)
         return
     }
 
@@ -85,7 +85,7 @@ app.put('/users/:id', (req: Request, res: Response) => {
     }
 
     foundUser.name = req.body.name as string
-    res.sendStatus(HTTP_STATUS.NO_CONTENT_204)
+    res.status(HTTP_STATUS.OK_200).json(foundUser)
 })
 
 app.listen(port, () => {
