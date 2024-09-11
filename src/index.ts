@@ -1,10 +1,10 @@
 import express, {Express, Request, Response} from 'express'
 import {HTTP_STATUS} from './consts'
-import {DB_Type, User, Users_List} from "./types";
+import {DBType, User, UsersList} from "./types";
 
 const app: Express = express()
 const port: number = 3003
-const db: DB_Type = {
+const db: DBType = {
     users: [
         {id: 1, name: 'Alex Userson'},
         {id: 2, name: 'Dima'},
@@ -18,7 +18,7 @@ const db: DB_Type = {
 app.use(express.json())
 
 app.get('/users', (req: Request, res: Response) => {
-    let foundUsers: Users_List = db.users
+    let foundUsers: UsersList = db.users
 
     if (req.query.name) {
         foundUsers = foundUsers.filter(
