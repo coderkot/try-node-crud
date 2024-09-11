@@ -58,11 +58,15 @@ app.post('/users', (req: Request, res: Response) => {
 })
 
 app.delete('/users/:id', (req: Request, res: Response) => {
-    db.users =  db.users.filter(
-        user => user.id !== +req.params.id
-    )
+    for (let i = 0; i < db.users.length; i++) {
+        if (db.users[i].id === +req.params.id) {
+            db.users.splice(i, 1)
+            res.sendStatus(HTTP_STATUS.NO_CONTENT_204)
+            return
+        }
+    }
 
-    res.sendStatus(HTTP_STATUS.NO_CONTENT_204)
+    res.sendStatus(HTTP_STATUS.NOT_FOUND_404)
 })
 
 app.put('/users/:id', (req: Request, res: Response) => {
