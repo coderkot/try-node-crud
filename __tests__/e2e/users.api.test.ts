@@ -49,6 +49,8 @@ describe('/users', () => {
             id: expect.any(Number),
             name: 'Test User',
         })
+
+        await doRequest.get('/users').expect(HTTP_STATUS.OK_200, [createdUser])
     })
 
     /** update user with incorrect data */
@@ -68,14 +70,21 @@ describe('/users', () => {
     /** update user with incorrect id */
     it('Should return code 404 of update user with incorrect id', async () => {
         await doRequest.put(`/users/99999`).expect(HTTP_STATUS.BAD_REQUEST_400)
+
+        await doRequest.get('/users').expect(HTTP_STATUS.OK_200, [createdUser])
     })
 
     /** update user */
     it('Should return code 200 of update user', async () => {
-        await doRequest
+        const createResponse = await doRequest
             .put(`/users/${createdUser?.id}`)
             .send({name: 'Alexander Userson'})
-            .expect(HTTP_STATUS.OK_200, {id: createdUser?.id, name: 'Alexander Userson'})
+            .expect(HTTP_STATUS.OK_200)
+
+        createdUser = createResponse.body
+        expect(createdUser).toEqual(createdUser)
+
+        await doRequest.get('/users').expect(HTTP_STATUS.OK_200, [createdUser])
     })
 
     /** get users array */
@@ -89,7 +98,7 @@ describe('/users', () => {
     it('Should return code 200 and user object', async () => {
         await doRequest
             .get(`/users/${createdUser?.id}`)
-            .expect(HTTP_STATUS.OK_200, {id: createdUser?.id ,name: 'Alexander Userson'})
+            .expect(HTTP_STATUS.OK_200, createdUser)
     })
 
     /** get user by NAME query parameter */
@@ -97,7 +106,7 @@ describe('/users', () => {
         await doRequest
             .get(`/users`)
             .query({name: 'userson'})
-            .expect(HTTP_STATUS.OK_200, [{id: createdUser?.id ,name: 'Alexander Userson'}])
+            .expect(HTTP_STATUS.OK_200, [createdUser])
     })
 
     /** get not existing user */
@@ -108,6 +117,8 @@ describe('/users', () => {
     /** delete not existing user */
     it('Should return code 404 of delete not existing user', async () => {
         await doRequest.delete(`/users/100500`).expect(HTTP_STATUS.NOT_FOUND_404)
+
+        await doRequest.get('/users').expect(HTTP_STATUS.OK_200, [createdUser])
     })
 
     /** delete user */
