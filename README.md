@@ -1,4 +1,4 @@
-# Frontend склегка [наскучил](https://a.d-cd.net/GsAAAgKis-A-960.jpg) уже!
+# Frontend слегка [наскучил](https://a.d-cd.net/GsAAAgKis-A-960.jpg) уже!
 ## Решил с ноги влететь в backend на Node.js
 
 Что имеем:
