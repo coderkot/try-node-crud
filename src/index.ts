@@ -2,7 +2,7 @@ import express, {Express, Request, Response} from 'express'
 import {HTTP_STATUS, STATUS_MESSAGES} from './consts'
 import {DBType, User, UsersList} from "./types";
 
-const app: Express = express()
+export const app: Express = express()
 const port: number = 3003
 const db: DBType = {
     users: [
@@ -26,7 +26,7 @@ app.get('/users', (req: Request, res: Response) => {
         )
     }
 
-    res.json(foundUsers)
+    res.status(HTTP_STATUS.OK_200).json(foundUsers)
 })
 
 app.get('/users/:id', (req: Request, res: Response) => {
@@ -39,7 +39,7 @@ app.get('/users/:id', (req: Request, res: Response) => {
         return
     }
 
-    res.json(foundUser)
+    res.status(HTTP_STATUS.OK_200).json(foundUser)
 })
 
 app.post('/users', (req: Request, res: Response) => {
@@ -86,6 +86,12 @@ app.put('/users/:id', (req: Request, res: Response) => {
 
     foundUser.name = req.body.name as string
     res.status(HTTP_STATUS.OK_200).json(foundUser)
+})
+
+app.delete('/__test__/init-drop-users', (req: Request, res: Response) => {
+    db.users = []
+
+    res.sendStatus(HTTP_STATUS.NO_CONTENT_204)
 })
 
 app.listen(port, () => {
