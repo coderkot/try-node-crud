@@ -17,6 +17,10 @@ const db: DBType = {
 
 app.use(express.json())
 
+app.get('/', (req: Request, res: Response) => {
+    res.send(STATUS_MESSAGES.WELCOME)
+})
+
 app.get('/users', (req: Request, res: Response) => {
     let foundUsers: UsersList = db.users
 
@@ -95,7 +99,7 @@ app.delete('/__test__/init-drop-users', (req: Request, res: Response) => {
 })
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+    console.log(`Example app listening on port: ${port}`)
 })
 
 export default app

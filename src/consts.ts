@@ -8,4 +8,5 @@ export enum HTTP_STATUS {
 
 export enum STATUS_MESSAGES {
     BODY_EMPTY_NAME = 'Name cannot be empty',
+    WELCOME = 'Welcome to the server',
 }

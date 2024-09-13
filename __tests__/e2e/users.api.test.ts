@@ -12,6 +12,11 @@ describe('/users', () => {
         await request(app).delete('/__test__/init-drop-users')
     })
 
+    /** get welcome message */
+    it("Should return 200 and welcome message", async () => {
+        await request(app).get('/').expect(HTTP_STATUS.OK_200, STATUS_MESSAGES.WELCOME)
+    })
+
     /** get users array (empty) */
     it('Should return code 200 and array of users', async () => {
         await request(app)
@@ -79,11 +84,19 @@ describe('/users', () => {
             .expect(HTTP_STATUS.OK_200, [{id: createdUser?.id ,name: 'Alexander Userson'}])
     })
 
-    /** get user */
+    /** get user by ID */
     it('Should return code 200 and user object', async () => {
         await request(app)
             .get(`/users/${createdUser?.id}`)
             .expect(HTTP_STATUS.OK_200, {id: createdUser?.id ,name: 'Alexander Userson'})
+    })
+
+    /** get user by NAME query parameter */
+    it('Should return code 200 and user object', async () => {
+        await request(app)
+            .get(`/users`)
+            .query({name: 'userson'})
+            .expect(HTTP_STATUS.OK_200, [{id: createdUser?.id ,name: 'Alexander Userson'}])
     })
 
     /** get not existing user */
