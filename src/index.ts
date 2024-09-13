@@ -2,7 +2,7 @@ import express, {Express, Request, Response} from 'express'
 import {HTTP_STATUS, STATUS_MESSAGES} from './consts'
 import {DBType, User, UsersList} from "./types";
 
-export const app: Express = express()
+const app: Express = express()
 const port: number = 3003
 const db: DBType = {
     users: [
@@ -97,3 +97,6 @@ app.delete('/__test__/init-drop-users', (req: Request, res: Response) => {
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
+
+export default app
+module.exports = app;

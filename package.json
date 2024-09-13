@@ -10,7 +10,7 @@
     "watch": "tsc -w",
     "build": "tsc",
     "deploy": "vercel --prod",
-    "test": "jest --runInBand --detectOpenHandles --forceExit"
+    "test": "jest"
   },
   "dependencies": {
     "express": "^4.19.2"
