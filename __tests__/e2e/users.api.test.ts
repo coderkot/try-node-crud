@@ -1,13 +1,16 @@
 import request from 'supertest'
 import app from '../../src'
 import {HTTP_STATUS, STATUS_MESSAGES} from "../../src/consts"
-import {User} from "../../src/types"
+import {UsersType} from "../../src/types/types"
 import TestAgent from "supertest/lib/agent"
+import {UserCreateModel} from "../../src/models/UserCreateModel"
+import {UserQueryModel} from "../../src/models/GetUserQueryModel"
+import {UserUpdateModel} from "../../src/models/UserUpdateModel";
 
 describe('/users', () => {
 
     const doRequest: TestAgent = request(app)
-    let createdUser: User | undefined
+    let createdUser: UsersType | undefined
 
     /** drop init data */
     beforeAll(async () => {
@@ -31,24 +34,26 @@ describe('/users', () => {
 
     /** create new user with incorrect data */
     it('Should return code 400 of create new user with incorrect data', async () => {
-        await doRequest.post('/users').expect(HTTP_STATUS.BAD_REQUEST_400, STATUS_MESSAGES.BODY_EMPTY_NAME)
+        await doRequest.post('/users').expect(HTTP_STATUS.BAD_REQUEST_400, STATUS_MESSAGES.EMPTY_DATA)
 
         await doRequest.get('/users').expect(HTTP_STATUS.OK_200, [])
     })
 
     /** create new user */
     it('Should return code 201 of create new user', async () => {
+        const data: UserCreateModel = {name: 'Test User', email: 'test@test.com'};
         const createResponse = await doRequest
             .post('/users')
-            .send({name: 'Test User'})
+            .send(data)
             .expect(HTTP_STATUS.CREATED_201)
 
         createdUser = createResponse.body
 
-        expect(createdUser).toEqual({
+        const user: UsersType = {
             id: expect.any(Number),
             name: 'Test User',
-        })
+        };
+        expect(createdUser).toEqual(user)
 
         await doRequest.get('/users').expect(HTTP_STATUS.OK_200, [createdUser])
     })
@@ -76,9 +81,10 @@ describe('/users', () => {
 
     /** update user */
     it('Should return code 200 of update user', async () => {
+        const data: UserUpdateModel = {name: 'Alexander Userson'};
         const createResponse = await doRequest
             .put(`/users/${createdUser?.id}`)
-            .send({name: 'Alexander Userson'})
+            .send(data)
             .expect(HTTP_STATUS.OK_200)
 
         createdUser = createResponse.body
@@ -89,9 +95,10 @@ describe('/users', () => {
 
     /** get users array */
     it('Should return code 200 and array of users', async () => {
+        const data: UsersType = {id: createdUser?.id as number, name: 'Alexander Userson'};
         await doRequest
             .get('/users')
-            .expect(HTTP_STATUS.OK_200, [{id: createdUser?.id ,name: 'Alexander Userson'}])
+            .expect(HTTP_STATUS.OK_200, [data])
     })
 
     /** get user by ID */
@@ -103,9 +110,10 @@ describe('/users', () => {
 
     /** get user by NAME query parameter */
     it('Should return code 200 and user object', async () => {
+        const data: UserQueryModel = {name: 'userson'};
         await doRequest
             .get(`/users`)
-            .query({name: 'userson'})
+            .query(data)
             .expect(HTTP_STATUS.OK_200, [createdUser])
     })
 
