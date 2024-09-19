@@ -10,7 +10,7 @@
     "build": "tsc",
     "deploydev": "vercel dev",
     "deploy": "vercel --prod",
-    "test": "jest"
+    "test": "jest --detectOpenHandles --no-cache"
   },
   "dependencies": {
     "express": "^4.19.2"
