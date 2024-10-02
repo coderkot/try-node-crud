@@ -1,12 +1,12 @@
 import express, {Request, Response} from "express"
 import {HTTP_STATUS} from "../consts"
-import {DBType} from "../types/common-types"
+import {usersRepo} from "../repostories/users-repo"
 
-export const getTestsRouter = (db: DBType) => {
+export const getTestsRouter = () => {
     const router: express.Router = express.Router()
 
     router.delete('/init-drop-users', (req: Request, res: Response) => {
-        db.users = []
+        usersRepo.dropAllUsers()
 
         res.sendStatus(HTTP_STATUS.NO_CONTENT_204)
     })
