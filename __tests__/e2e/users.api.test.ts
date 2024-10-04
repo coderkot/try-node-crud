@@ -138,6 +138,22 @@ describe('/users', () => {
         await doRequest().get('/users').expect(HTTP_STATUS.OK_200, [])
     })
 
+    /** get unauthorized access to admin panel */
+    it('Should return code 401', async () => {
+        await doRequest()
+            .get(`/admin`)
+            .expect(HTTP_STATUS.UNAUTHORIZED_401)
+    })
+
+    /** get access to admin panel */
+    it('Should return code 200', async () => {
+        const token = {token: '123'};
+        await doRequest()
+            .get(`/admin`)
+            .query(token)
+            .expect(HTTP_STATUS.OK_200)
+    })
+
     afterAll(done => done())
 
 })
