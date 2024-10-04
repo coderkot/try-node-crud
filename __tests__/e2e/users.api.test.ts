@@ -7,7 +7,7 @@ import {UserCreateModel} from "../../src/models/UserCreateModel"
 import {UserQueryModel} from "../../src/models/GetUserQueryModel"
 import {UserUpdateModel} from "../../src/models/UserUpdateModel"
 
-jest.useRealTimers();
+jest.useRealTimers()
 
 describe('/users', () => {
 
@@ -138,15 +138,23 @@ describe('/users', () => {
         await doRequest().get('/users').expect(HTTP_STATUS.OK_200, [])
     })
 
+    afterAll(done => done())
+
+})
+
+describe('/admin', () => {
+
+    const doRequest = (): TestAgent => request(app)
+
     /** get unauthorized access to admin panel */
-    it('Should return code 401', async () => {
+    it('Should return code 401 unauthorized', async () => {
         await doRequest()
             .get(`/admin`)
             .expect(HTTP_STATUS.UNAUTHORIZED_401)
     })
 
     /** get access to admin panel */
-    it('Should return code 200', async () => {
+    it('Should return code 200 - admin auth', async () => {
         const token = {token: '123'};
         await doRequest()
             .get(`/admin`)
