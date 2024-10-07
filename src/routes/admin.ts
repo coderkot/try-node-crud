@@ -8,7 +8,7 @@ export const getAdminRouter = (): express.Router => {
         .get(
             authCheckPointMiddleWare,
             (req: express.Request, res: express.Response) => {
-                res.status(200).send('Admin panel')
+                res.status(200).send('Admin panel ' + process.env.PG_USER)
             })
 
     return router
