@@ -31,8 +31,8 @@ export const usersRepo: UserRepositoriesType = {
     createUser(name: string, email: string): UsersType {
         const createdUser: UsersType =  {
             id: +new Date(),
-            name: name,
-            email: email,
+            name: name.trim(),
+            email: email.trim(),
         }
 
         db.users.push(createdUser)
@@ -45,7 +45,7 @@ export const usersRepo: UserRepositoriesType = {
             return false
         }
 
-        foundUser.name = name
+        foundUser.name = name.trim()
         return true
     },
     deleteUserById(id: number): boolean {

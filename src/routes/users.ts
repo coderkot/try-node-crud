@@ -20,8 +20,8 @@ export const getUsersRouter = (): express.Router => {
             res.status(HTTP_STATUS.OK_200).json(users.map(getUserViewModel))
         })
         .post((req: RequestBody<UserCreateModel>, res: Response<UsersType|Object>) => {
-            if (!req.body.name || !req.body.email) {
-                res.status(HTTP_STATUS.BAD_REQUEST_400).send(STATUS_MESSAGES.EMPTY_DATA)
+            if (!req.body.name?.trim() || !req.body.email?.trim()) {
+                res.status(HTTP_STATUS.BAD_REQUEST_400).send({error: STATUS_MESSAGES.EMPTY_DATA})
                 return
             }
 
@@ -54,8 +54,8 @@ export const getUsersRouter = (): express.Router => {
             res.status(HTTP_STATUS.OK_200).json(getUserViewModel(foundUser))
         })
         .put((req: RequestBodyParam<URIUserIdParamsModel, UserUpdateModel>, res: Response<UsersType|Object>) => {
-            if (!req.body.name) {
-                res.status(HTTP_STATUS.BAD_REQUEST_400).send(STATUS_MESSAGES.BODY_EMPTY_NAME)
+            if (!req.body.name?.trim()) {
+                res.status(HTTP_STATUS.BAD_REQUEST_400).send({error: STATUS_MESSAGES.BODY_EMPTY_NAME})
                 return
             }
 
