@@ -7,9 +7,9 @@ import {getUserViewModel} from "../utils"
 import {UserCreateModel} from "../models/UserCreateModel"
 import {URIUserIdParamsModel} from "../models/URIUserIdParamsModel"
 import {UserUpdateModel} from "../models/UserUpdateModel"
-import * as fs from "node:fs"
 import {usersRepo} from "../repostories/users-repo"
 import {body, validationResult} from "express-validator"
+import {userEmailValidator, userNameValidator} from "../middlewares/userValidation"
 
 export const getUsersRouter = (): express.Router => {
     const router: express.Router = express.Router()
@@ -21,8 +21,8 @@ export const getUsersRouter = (): express.Router => {
             res.status(HTTP_STATUS.OK_200).json(users.map(getUserViewModel))
         })
         .post(
-            body('name').notEmpty(),
-            body('email').notEmpty().isEmail(),
+            userNameValidator,
+            userEmailValidator,
             (req: RequestBody<UserCreateModel>, res: Response<UsersType|Object>) => {
                 const errors = validationResult(req)
 
@@ -46,7 +46,7 @@ export const getUsersRouter = (): express.Router => {
             res.status(HTTP_STATUS.OK_200).json(getUserViewModel(foundUser))
         })
         .put(
-            body('name').notEmpty(),
+            userNameValidator,
             (req: RequestBodyParam<URIUserIdParamsModel, UserUpdateModel>, res: Response<UsersType|Object>) => {
                 const errors = validationResult(req)
 
