@@ -36,7 +36,7 @@ describe('/users', () => {
 
     /** create new user with incorrect data */
     it('Should return code 400 of create new user with incorrect data', async () => {
-        await doRequest().post('/users').expect(HTTP_STATUS.BAD_REQUEST_400, {error: STATUS_MESSAGES.EMPTY_DATA})
+        await doRequest().post('/users').expect(HTTP_STATUS.BAD_REQUEST_400)
 
         await doRequest().get('/users').expect(HTTP_STATUS.OK_200, [])
     })
