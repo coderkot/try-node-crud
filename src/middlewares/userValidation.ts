@@ -1,9 +1,10 @@
 import {body} from "express-validator";
+import {STATUS_MESSAGES} from "../consts"
 
 export const userNameValidator = body('name')
-    .notEmpty().withMessage('Name is required')
-    .isLength({ min: 3 }).withMessage('Min length is 3 symbols');
+    .notEmpty().withMessage(STATUS_MESSAGES.REQUIRED_NAME)
+    .isLength({ min: 3 }).withMessage(STATUS_MESSAGES.MIN_LENGTH_3);
 
 export const userEmailValidator = body('email')
-    .notEmpty().withMessage('Email is required')
-    .isEmail().withMessage('This is not a valid email address')
+    .notEmpty().withMessage(STATUS_MESSAGES.REQUIRED_EMAIL)
+    .isEmail().withMessage(STATUS_MESSAGES.INVALID_EMAIL)

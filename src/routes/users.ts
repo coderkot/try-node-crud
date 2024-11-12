@@ -1,5 +1,5 @@
 import express, {Response} from "express"
-import {HTTP_STATUS, STATUS_MESSAGES} from "../consts"
+import {HTTP_STATUS} from "../consts"
 import {RequestBody, RequestBodyParam, RequestParams, RequestQuery} from "../types/request-types"
 import {UserQueryModel} from "../models/GetUserQueryModel"
 import {UsersType} from "../types/common-types"
@@ -8,8 +8,8 @@ import {UserCreateModel} from "../models/UserCreateModel"
 import {URIUserIdParamsModel} from "../models/URIUserIdParamsModel"
 import {UserUpdateModel} from "../models/UserUpdateModel"
 import {usersRepo} from "../repostories/users-repo"
-import {body, validationResult} from "express-validator"
 import {userEmailValidator, userNameValidator} from "../middlewares/userValidation"
+import {validationErrorMiddleware} from "../middlewares/validationErrorsMiddleware";
 
 export const getUsersRouter = (): express.Router => {
     const router: express.Router = express.Router()
@@ -23,13 +23,8 @@ export const getUsersRouter = (): express.Router => {
         .post(
             userNameValidator,
             userEmailValidator,
+            validationErrorMiddleware,
             (req: RequestBody<UserCreateModel>, res: Response<UsersType|Object>) => {
-                const errors = validationResult(req)
-
-                if (!errors.isEmpty()) {
-                    return res.status(HTTP_STATUS.BAD_REQUEST_400).json({errors: errors.array()});
-                }
-
                 const createdUser: UsersType = usersRepo.createUser(req.body.name, req.body.email)
                 res.status(HTTP_STATUS.CREATED_201).json(getUserViewModel(createdUser))
             })
@@ -47,13 +42,8 @@ export const getUsersRouter = (): express.Router => {
         })
         .put(
             userNameValidator,
-            (req: RequestBodyParam<URIUserIdParamsModel, UserUpdateModel>, res: Response<UsersType|Object>) => {
-                const errors = validationResult(req)
-
-                if (!errors.isEmpty()) {
-                    return res.status(HTTP_STATUS.BAD_REQUEST_400).json({errors: errors.array()})
-                }
-
+            validationErrorMiddleware,
+            (req: RequestBodyParam<UserUpdateModel>, res: Response<UsersType|Object>) => {
                 const userIsUpdated: boolean = usersRepo.updateUser(+req.params.id, req.body.name)
                 if (!userIsUpdated) {
                     res.sendStatus(HTTP_STATUS.NOT_FOUND_404)
